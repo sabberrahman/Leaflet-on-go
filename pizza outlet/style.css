@@ -1,0 +1,28 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+main{
+    display: flex;
+}
+
+#map{
+height: 100vh;
+width: 75%;
+}
+
+.shop-item{
+    width: 25%;
+    height: 100vh;
+}
+
+.style-list{
+    padding: 1rem;
+    line-height: 1.1rem;
+}
