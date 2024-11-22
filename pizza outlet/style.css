@@ -20,9 +20,28 @@ width: 75%;
 .shop-item{
     width: 25%;
     height: 100vh;
+    overflow: auto;
+}
+
+::-webkit-scrollbar{
+    width: 5px;
+    height: 3px;
+    border-left: 0;
+    background: rgb(0, 0,0,0.1);
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(43, 72, 43);
+    border-radius: 0;
 }
 
 .style-list{
     padding: 1rem;
     line-height: 1.1rem;
+    border-bottom: 1px solid rgb(0, 0,0,0.1);
+}
+.style-list a{
+    list-style-type: none;
+    font-size: large;
+    font-weight: 600;
 }
