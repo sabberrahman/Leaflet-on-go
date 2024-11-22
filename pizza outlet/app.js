@@ -57,7 +57,7 @@ function makePopupcontent(shop) {
  `;
 }
 function onEachFeature(feature, layer) {
-  console.log(feature);
+  
   layer.bindPopup(makePopupcontent(feature));
 }
 
