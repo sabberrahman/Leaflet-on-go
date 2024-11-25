@@ -3,6 +3,20 @@
     padding: 0;
 }
 
+main{
+display: flex;
+text-align: center;
+}
+
 #map{
     height: 100vh;
+    width: 65%;
+}
+.side-bar{ 
+    height: 100vh;
+    width: 35%;
+
+};
+#mouse-move{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
