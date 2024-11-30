@@ -13,8 +13,8 @@ const map = L.map("map", { attributionControl: false }).setView(
 var lyrKarte = L.tileLayer.provider("OPNVKarte");
 var lyrMapnik = L.tileLayer.provider("OpenStreetMap.Mapnik");
 var lyrEsri = L.tileLayer.provider("Esri.WorldImagery");
-var lyrStadia = L.tileLayer.provider("Stadia.AlidadeSmoothDark");
-map.addLayer(lyrStadia);
+// var lyrStadia = L.tileLayer.provider("Stadia.AlidadeSmoothDark");
+map.addLayer(lyrKarte);
 
 var ctlAttribute = L.control.attribution().addTo(map);
     
@@ -23,8 +23,8 @@ ctlAttribute.addAttribution('&copy; <a href="https://github.com/sabberrahman"> S
 baseLayers = {
   Karte: lyrKarte,
   Mapnik: lyrMapnik,
-  Esri: lyrEsri,
-  Stadia: lyrStadia,
+  Esri: lyrEsri
+//  Stadia: lyrStadia,
 };
 
 var ftgDraw = L.featureGroup().addTo(map);
