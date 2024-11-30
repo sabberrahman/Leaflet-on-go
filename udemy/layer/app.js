@@ -16,6 +16,10 @@ var lyrEsri = L.tileLayer.provider("Esri.WorldImagery");
 var lyrStadia = L.tileLayer.provider("Stadia.AlidadeSmoothDark");
 map.addLayer(lyrStadia);
 
+var ctlAttribute = L.control.attribution().addTo(map);
+    
+ctlAttribute.addAttribution('&copy; <a href="https://github.com/sabberrahman"> Sabber rahman</a>');
+
 baseLayers = {
   Karte: lyrKarte,
   Mapnik: lyrMapnik,
