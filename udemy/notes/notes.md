@@ -44,3 +44,60 @@ locate.addEventListener("click",()=>{
 ## PopUP
 create a popup - latlng, content     
 add it ti mymap.OpenPopup(popup that you created as parameter)
+
+
+ <div id="divProject" class="col-xs-12">
+                <div id="divProjectLabel" class="text-center col-xs-12">
+                    <h4 id="lblProject">Linear Projects</h4>
+                </div>
+                <div id="divProjectError" class="errorMsg col-xs-12"></div>
+                <div id="divFindProject" class="form-group has-error">
+                    <div class="col-xs-6">
+                        <input type="text" id="txtFindProject" class="form-control" placeholder="Project ID">
+                    </div>
+                    <div class="col-xs-6">
+                        <button id="btnFindProject" class="btn btn-primary btn-block" disabled>Find Project</button>
+                    </div>
+                </div>
+                <div class="" id="divProjectData"></div>
+</div>
+   
+
+        $("#txtFindProject").on('keyup paste', function(){
+                var val = $("#txtFindProject").val();
+                testLayerAttribute(arProjectIDs, val, "PROJECT ID", "#divFindProject", "#divProjectError", "#btnFindProject");
+            });
+
+        $("#btnFindProject").click(function(){
+                var val = $("#txtFindProject").val();
+                var lyr = returnLayerByAttribute(lyrClientLines,'Project',val); // return match obj 
+                if (lyr) {
+                    if (lyrSearch) {
+                        lyrSearch.remove();
+                    }
+                    lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(mymap);
+                    mymap.fitBounds(lyr.getBounds().pad(1));
+                    var att = lyr.feature.properties;
+                    $("#divProjectData").html("<h4 class='text-center'>Attributes</h4><h5>Type: "+att.type+"</h5><h5>ROW width: "+att.row_width+ "m </h5>");
+                    $("#divProjectError").html("");
+                } else {
+                    $("#divProjectError").html("**** Project ID not found ****");
+                }
+        });
+
+        function processClientLinears(json, lyr) {
+            var att = json.properties;
+            lyr.bindTooltip("<h4>Linear Project: "+att.Project+"</h4>Type: "+att.type+"<br>ROW Width: "+att.row_width);
+            arProjectIDs.push(att.Project.toString());
+        }
+
+        function returnLayerByAttribute(lyr,att,val) {
+                        var arLayers = lyr.getLayers();
+                        for (i=0;i<arLayers.length-1;i++) {
+                            var ftrVal = arLayers[i].feature.properties[att];
+                            if (ftrVal==val) {
+                                return arLayers[i];
+                            }
+                        }
+                        return false;
+                    }

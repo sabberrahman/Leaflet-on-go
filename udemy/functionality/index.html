@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaflet with geoJSON </title>
+
+  <!-- links -->
+  <link rel="stylesheet" href="test.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
+  <link rel="stylesheet" href="./plugins/L.Control.Sidebar.css" />
+  <link rel="stylesheet" href="./plugins/leaflet-editor/css/Leaflet.StyleEditor.css">
+  <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.css">
+  <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.Default.css">
+
+  <!--Links End   -->
+
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+  <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+  <script src="./plugins/L.Control.Sidebar.js"></script>
+
+  <!-- scrips -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!--    ***************  Begin Leaflet.Draw-->
+
+  <script src="./plugins/leaflet-draw/Leaflet.draw.js"></script>
+  <script src="./plugins/leaflet-draw/Leaflet.Draw.Event.js"></script>
+  <link rel="stylesheet" href="./plugins/leaflet-draw/leaflet.draw.css" />
+
+  <script src="./plugins/leaflet-draw/Toolbar.js"></script>
+  <script src="./plugins/leaflet-draw/Tooltip.js"></script>
+
+  <script src="./plugins/leaflet-draw/ext/GeometryUtil.js"></script>
+  <script src="./plugins/leaflet-draw/ext/LatLngUtil.js"></script>
+  <script src="./plugins/leaflet-draw/ext/LineUtil.Intersect.js"></script>
+  <script src="./plugins/leaflet-draw/ext/Polygon.Intersect.js"></script>
+  <script src="./plugins/leaflet-draw/ext/Polyline.Intersect.js"></script>
+  <script src="./plugins/leaflet-draw/ext/TouchEvents.js"></script>
+
+  <script src="./plugins/leaflet-draw/draw/DrawToolbar.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Feature.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.SimpleShape.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Polyline.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Circle.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Marker.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Polygon.js"></script>
+  <script src="./plugins/leaflet-draw/draw/handler/Draw.Rectangle.js"></script>
+
+
+  <script src="./plugins/leaflet-draw/edit/EditToolbar.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/EditToolbar.Edit.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/EditToolbar.Delete.js"></script>
+
+  <script src="./plugins/leaflet-draw/Control.Draw.js"></script>
+
+  <script src="./plugins/leaflet-draw/edit/handler/Edit.Poly.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/Edit.SimpleShape.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/Edit.Circle.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/Edit.Rectangle.js"></script>
+  <script src="./plugins/leaflet-draw/edit/handler/Edit.Marker.js"></script>
+
+  <!--    **************  End of Lealet Draw-->
+  <script src=".\plugins\leaflet-editor\javascript\marker.js"></script>
+  <script src=".\plugins\leaflet-editor\javascript\Leaflet.StyleEditor.js"></script>
+  <script src="./plugins/leaflet.ajax.min.js"></script>
+  <script src="./plugins/cluster/leaflet.markercluster.js"></script>
+
+</head>
+
+<body>
+  <main class="">
+    <div id="sidebar" class="">
+      <div id="divLines" class="">
+        <h1 class="text-center text-xl m-2 font-semibold">Linear Project</h1>
+        <div id="">
+          <div class="flex gap-2">
+            <input type="text" id="txtFindLines" placeholder="Projects ID" class="p-2 border outline-none border-black/30 border-spacing-4 rounded-lg flex-1">
+            <button id="btnFindLines" class="bg-blue-500 text-white p-2.5 rounded-lg w-full">Find Project</button>
+          </div>
+          <div id="divErrorLine" class="bg-red-300 text-red-700 text-center font-bold mt-2 rounded-lg"></div>
+          <div id="divLinesData" class="bg-blue-200 border-x border-blue-500 text-center text-blue-800 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div id="map"></div>
+  </main>
+  <script src="./function.js"></script>
+</body>
+
+</html>
