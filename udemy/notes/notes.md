@@ -1,4 +1,3 @@
-### chapter 1
 
 $(document).ready(function(){
 // fast load ?? jQuery
@@ -46,6 +45,9 @@ create a popup - latlng, content
 add it ti mymap.OpenPopup(popup that you created as parameter)
 
 
+# find projects
+
+ ```html js
  <div id="divProject" class="col-xs-12">
                 <div id="divProjectLabel" class="text-center col-xs-12">
                     <h4 id="lblProject">Linear Projects</h4>
@@ -60,8 +62,9 @@ add it ti mymap.OpenPopup(popup that you created as parameter)
                     </div>
                 </div>
                 <div class="" id="divProjectData"></div>
-</div>
-   
+</div> 
+
+
 
         $("#txtFindProject").on('keyup paste', function(){
                 var val = $("#txtFindProject").val();
@@ -101,3 +104,25 @@ add it ti mymap.OpenPopup(popup that you created as parameter)
                         }
                         return false;
                     }
+```
+
+# filter with checkBoxs
+
+        ``` js
+        <div id="divFilterProject" class="col-xs-12">
+                            <div class="col-xs-4">
+                                <input type='checkbox' name='fltProject' value='Pipeline' checked>Pipelines<br>
+                                <input type='checkbox' name='fltProject' value='Road' checked>Access Roads
+                                <button id="btnProjectFilterAll" class="btn btn-primary btn-block">Check All</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <input type='checkbox' name='fltProject' value='Electric' checked>Electric Lines<br>
+                                <input type='checkbox' name='fltProject' value='Extraction' checked>Extractions
+                                <button id="btnProjectFilterNone" class="btn btn-primary btn-block">Uncheck All</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <input type='checkbox' name='fltProject' value='Flowline' checked>Flowlines<br>
+                                <input type='checkbox' name='fltProject' value='Other' checked>Other
+                                <button id="btnProjectFilter" class="btn btn-primary btn-block">Filter</button>
+                            </div>
+        ```

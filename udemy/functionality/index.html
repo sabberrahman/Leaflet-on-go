@@ -9,6 +9,10 @@
   <!-- links -->
   <link rel="stylesheet" href="test.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -17,6 +21,7 @@
   <link rel="stylesheet" href="./plugins/leaflet-editor/css/Leaflet.StyleEditor.css">
   <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.css">
   <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="./plugins/jquery-ui.min.css">
 
   <!--Links End   -->
 
@@ -73,24 +78,96 @@
   <script src=".\plugins\leaflet-editor\javascript\Leaflet.StyleEditor.js"></script>
   <script src="./plugins/leaflet.ajax.min.js"></script>
   <script src="./plugins/cluster/leaflet.markercluster.js"></script>
+  <script src="./plugins/jquery-ui.min.js"></script>
 
 </head>
 
 <body>
-  <main class="">
-    <div id="sidebar" class="">
-      <div id="divLines" class="">
-        <h1 class="text-center text-xl m-2 font-semibold">Linear Project</h1>
+  <main class="overflow-y-auto">
+    <!-- line projects -->
+    <div id="sidebar" class="brifont">
+      <div id="divLines" class="border-b-2 border-black/40 bg-gray-900 p-4 rounded-lg  border-gray-700 border-2 ">
+        <h1 class="text-center text-xl m-2 font-semibold text-white">Linear Project</h1>
         <div id="">
           <div class="flex gap-2">
-            <input type="text" id="txtFindLines" placeholder="Projects ID" class="p-2 border outline-none border-black/30 border-spacing-4 rounded-lg flex-1">
-            <button id="btnFindLines" class="bg-blue-500 text-white p-2.5 rounded-lg w-full">Find Project</button>
+            <input type="text" id="txtFindLines" placeholder="Projects ID"
+              class="p-2 border outline-none border-black/30 border-spacing-4 rounded-lg flex-1 ">
+            <button id="btnFindLines" class="bg-blue-500 text-white p-2.5 rounded-lg w-full hover:bg-blue-700">Find
+              Project</button>
           </div>
           <div id="divErrorLine" class="bg-red-300 text-red-700 text-center font-bold mt-2 rounded-lg"></div>
-          <div id="divLinesData" class="bg-blue-200 border-x border-blue-500 text-center text-blue-800 rounded-lg"></div>
+          <div id="divLinesData" class="bg-blue-200 border-x border-blue-500 text-center text-blue-800 rounded-lg">
+          </div>
+        </div>
+      </div>
+      <!--Eagle  Nest  -->
+      <div id="divLines"
+        class="border-b-2 border-black/40 mt-4  bg-amber-200 p-4 rounded-lg border-yellow-600 border-2 ">
+        <h1 class="text-center text-xl m-2 font-semibold">Eagle Nest</h1>
+        <div id="">
+          <div class="flex gap-2">
+            <input type="text" id="txtFindNest" placeholder="Nest ID"
+              class="p-2 border outline-none border-black/30 border-spacing-4 rounded-lg flex-1 ">
+            <button id="btnFindNest" class="bg-blue-500 text-white p-2.5 rounded-lg w-full hover:bg-blue-700">Find
+              Nest</button>
+          </div>
+          <div id="divErrorNest" class="bg-red-300 text-red-700 text-center font-bold mt-2 rounded-lg"></div>
+          <div id="divNestData" class="bg-blue-200 border-x border-blue-500 text-center text-blue-800 rounded-lg"></div>
+        </div>
+      </div>
+
+      <!--Buowl  Nest  -->
+      <div id="divLines"
+        class="border-b-2 border-black/40 mt-4  bg-[#95c5a2] p-4 rounded-lg border-green-600 border-2 ">
+        <h1 class="text-center text-xl m-2 font-semibold">Buowl Nest</h1>
+        <div id="">
+          <div class="flex gap-2">
+            <input type="text" id="txtFindBuowl" placeholder="Nest ID"
+              class="p-2 border outline-none border-black/30 border-spacing-4 rounded-lg flex-1 ">
+            <button id="btnFindBuowl" class="bg-blue-500 text-white p-2.5 rounded-lg w-full hover:bg-blue-700">Find
+              Nest</button>
+          </div>
+          <div id="divErrorBuowl" class="bg-red-300 text-red-700 text-center font-bold mt-2 rounded-lg"></div>
+          <div id="divBuowlData" class="bg-blue-200 border-x border-blue-500 text-center text-blue-800 rounded-lg">
+          </div>
+        </div>
+      </div>
+
+      <!-- checkBoxs -->
+      <div>
+
+      </div>
+
+      <div id="checkboxContainer"
+        class="text-lg  mt-4 text-start font-bold bg-slate-200/60 p-4 border-slate-500 border-2 rounded-lg">
+        <label><input type="checkbox" class="custom-checkbox" name="custom" value="Eagle" checked>Eagle Nest
+          layer</label><br>
+        <label><input type="checkbox" class="custom-checkbox" name="custom" value="Road" checked> Road Layer</label><br>
+        <label><input type="checkbox" class="custom-checkbox" name="custom" value="Buowl" checked> Buowl Nest
+          Layer</label>
+      </div>
+">
+        <!-- <h3 class="font-bold text-center">Total Nest</h3> -->
+         <!-- bg-red-200/70 border-red-600/60 -->
+        <div id="numTotalNest" class="pl-1 flex gap-2 ">
+
+          <div  class="w-1/2 border text-start pl-2 bg-green-200/60 rounded-xl border-green-700">
+            <h1 class="text-green-900 p-1 font-bold text-center px-2 rounded-lg text-lg ">Active Nest</h1>
+           <h1 class="text-[17px]">Eagle : <span id="activeEagle" class="text-green-600"></span></h1>
+           <h1 class="text-[17px]">Buowl : <span id="activeBuowl"  class="text-green-600"></span></h1>
+          </div>
+          <div class="w-1/2 border text-start pl-2 bg-red-200/60 rounded-xl border-red-700 ">
+            <h1 class="text-center font-bold p-1 rounded-lg text-red-900 px-2 text-lg">InActive Nest</h1>
+           <h1 class="text-[17px]">Eagle : <span id="inactiveEagle"  class="text-red-600 "></span></h1>
+           <h1 class="text-[17px]">Buowl : <span id="inactiveBuowl"  class="text-red-600"></span></h1>
+          </div>
+          
         </div>
       </div>
     </div>
+    </div>
+
+
 
 
 

@@ -8,6 +8,14 @@ var lyrRaptor;
 var lyrLines;
 var markerCuster;
 var lyrSearch;
+var arLines = [];
+var arBuowl = [];
+var arEagleIDs = [];
+var numActiveEagle=0;
+var numInactiveEagle=0;
+var numActiveBuowl=0;
+var numInactiveBuowl=0;
+
 
 //map> layer> data> layer control> layer functions > events + common functions
 
@@ -33,7 +41,7 @@ L.easyButton("glyphicon-transfer", () => {
 }).addTo(map);
 
 map.addControl(
-  L.control.styleEditor({ position: "topleft", useGrouping: false })
+  L.control.styleEditor({ position: "topright", useGrouping: false })
 );
 
 
@@ -73,7 +81,8 @@ lyrBuowl = L.geoJSON.ajax("data/wildlife_raptor.geojson", {
 });
 
 lyrRaptor=L.geoJSON.ajax("data/wildlife_raptor.geojson")
-lyrLines=L.geoJSON.ajax("data/client_lines.geojson").addTo(map)
+lyrLines=L.geoJSON.ajax("data/client_lines.geojson",{style:styleLines}).addTo(map)
+
 
 
 // ****dymatic layer*********
@@ -89,11 +98,11 @@ overLays = {
   Draw: ftgDraw,
   "Eagle Nest": lyrEgleNest,
   "Buowl Located": markerCuster,
-  "Raptor":lyrRaptor,
+ // "Raptor":lyrRaptor,
   "Road Lines":lyrLines
 };
 
-ctlLayer = L.control.layers(baseLayers, overLays).addTo(map);
+ctlLayer = L.control.layers(baseLayers, overLays).addTo(map)
 
 //********layer events/ Any events*******/
 
@@ -132,6 +141,135 @@ $("#btnFindLines").click(function(){
   }
 });
 
+//**Eagle nest****/
+$("#btnFindNest").click(function(){
+  var val = $("#txtFindNest").val();
+  var lyr = returnLayerByAttribute(lyrEgleNest,'nest_id',val); // return match obj 
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      }
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(map);
+      map.fitBounds(lyr.getBounds().pad(1));
+      var att = lyr.feature.properties;
+ //     console.log(att)
+      $("#divNestData").html(`
+
+        <div class='mb-2'>
+        <h4 class='font-bold mt-4 p-2'>Attribute of the Nest</h4>
+        <div class='inline-flex gap-2'>
+        <h5>Status: </h5>
+        <h5 class='${att.status === "ACTIVE NEST" ? "text-green-500" : "text-red-500"} inline-flex'> 
+          ${att.status}
+        </h5> </div> </div>
+      `);
+      $("#divErrorNest").html("");
+  } else {
+      $("#divErrorNest").html("<h4 class='p-2'>Project ID not found</h4>");
+      $("#divNestData").html("");
+  }
+});
+
+// ***autocompelte*******
+
+lyrEgleNest.on('data:loaded', function(){
+  arEagleIDs.sort(function(a,b){return a-b});
+  $("#txtFindNest").autocomplete({
+      source:arEagleIDs
+  });
+});
+
+lyrBuowl.on('data:loaded', function(){
+  arBuowl.sort(function(a,b){return a-b});
+  $("#txtFindBuowl").autocomplete({
+      source:arBuowl
+  });
+});
+
+lyrLines.on('data:loaded', function(){
+  arLines.sort(function(a,b){return a-b});
+  $("#txtFindLines").autocomplete({
+      source:arLines
+  });
+});
+
+
+
+
+//BUOWL nest event/
+$("#btnFindBuowl").click(function(){
+  var val = $("#txtFindBuowl").val();
+  var lyr = returnLayerByAttribute(lyrBuowl,'Nest_ID',val); // return match obj 
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      }
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(map);
+     
+      let Bounds = lyrSearch.getBounds()
+       map.fitBounds(Bounds,{maxZoom:15});
+      var att = lyr.feature.properties;
+      // console.log(att)
+      $("#divBuowlData").html(`
+
+        <div class='mb-2'>
+        <h4 class='font-bold mt-4 p-2'>Attribute of the Nest</h4>
+        <div class='inline-flex gap-2'>
+        <h5>Status: </h5>
+        <h5 class='${att.recentstatus === "ACTIVE NEST" ? "text-green-500" : "text-red-500"} inline-flex'> 
+          ${att.recentstatus}
+        </h5> </div> <br/>
+
+        <div class='inline-flex gap-2'>
+        <h5>Species: </h5>
+        <h5 class='inline-flex font-semibold'> 
+          ${att.recentspecies}
+        </h5> </div> 
+        
+        </div>
+      `);
+      $("#divErrorBuowl").html("");
+  } else {
+      $("#divErrorBuowl").html("<h4 class='p-2'>Project ID not found</h4>");
+      $("#divBuowlData").html("");
+  }
+});
+
+$("input[name=custom]").click(function(){
+  
+var val= $(this).val()
+if ($(this).is(":checked")) {
+  if (val === "Eagle") {
+    map.addLayer(lyrEgleNest);}
+ 
+if (val === "Road") {
+    map.addLayer(lyrLines);
+  
+} 
+if (val === "Buowl") {
+    map.addLayer(markerCuster);
+   
+}
+
+  
+}
+else {
+
+  if (val === "Eagle") {
+    lyrEgleNest.remove()
+      
+   } 
+   if (val === "Road") {
+     lyrLines.remove()
+   }
+   if (val === "Buowl") {
+    markerCuster.remove()
+   }
+ 
+}
+
+});
+
 
 
 // ********functions************
@@ -139,13 +277,16 @@ function returnEagleIcon(json, latlng) {
   var colorNest;
   var opacityNest;
   var att = json.properties;
+  arEagleIDs.push(att.nest_id.toString());
   // console.log(att)
   if (att.status == "ACTIVE NEST") {
     colorNest = "green";
     opacityNest = 1;
+    numActiveEagle++;
   } else {
     colorNest = "red";
     opacityNest = 0.1;
+    numInactiveEagle++;
   }
   return L.circle(latlng, {
     radius: 800,
@@ -156,8 +297,14 @@ function returnEagleIcon(json, latlng) {
 
 function returnBuowlIcon(json, latlng) {
   var att = json.properties;
+  arBuowl.push(att.Nest_ID.toString())
   var color;
   //console.log(att);
+  if (att.recentstatus =="ACTIVE NEST") {
+    numActiveBuowl++;
+  } else{
+    numInactiveBuowl++
+  }
   switch (att.recentspecies) {
     case "Red-tail Hawk":
       color = "red";
@@ -192,5 +339,42 @@ function returnLayerByAttribute(lyr,att,val) {
   }
   return false;
 }
+
+function styleLines(json) {
+  var att = json.properties;
+  arLines.push(att.Project.toString())
+  switch (att.type) {
+      case 'Pipeline':
+          return {color:'peru'};
+          break;
+      case 'Flowline':
+          return {color:'navy'};
+          break;
+      case 'Flowline, est.':
+          return {color:'navy', dashArray:"5,5"};
+          break;
+      case 'Electric Line':
+          return {color:'darkgreen'};
+          break;
+      case 'Access Road - Confirmed':
+          return {color:'darkred'};
+          break;
+      case 'Access Road - Estimated':
+          return {color:'darkred', dashArray:"5,5"};
+          break;
+      case 'Extraction':
+          return {color:'indigo'};
+          break;
+      default:
+          return {color:'darkgoldenrod'}
+  }
+}
+
+setInterval(()=>{
+$("#activeEagle").text(numActiveEagle);
+$("#activeBuowl").text(numActiveBuowl);
+$("#inactiveEagle").text(numInactiveEagle);
+$("#inactiveBuowl").text(numInactiveBuowl);
+},1000)
 
 //***********common functions*******/
