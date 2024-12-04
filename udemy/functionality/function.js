@@ -415,6 +415,7 @@ $("#btnRemoveInactive").click(()=>{
  })
  $("#btnAddAllStatus").click(()=>{
   addMarkersByStatus(lyrEgleNest)
+  markerCuster.remove();
   addMarkersByStatus(markerCuster)
  })
 
