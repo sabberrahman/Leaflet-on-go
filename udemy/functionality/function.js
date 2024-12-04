@@ -11,11 +11,10 @@ var lyrSearch;
 var arLines = [];
 var arBuowl = [];
 var arEagleIDs = [];
-var numActiveEagle=0;
-var numInactiveEagle=0;
-var numActiveBuowl=0;
-var numInactiveBuowl=0;
-
+var numActiveEagle = 0;
+var numInactiveEagle = 0;
+var numActiveBuowl = 0;
+var numInactiveBuowl = 0;
 
 //map> layer> data> layer control> layer functions > events + common functions
 
@@ -34,16 +33,15 @@ ctlAttribute.addAttribution(
 
 var sidebar = L.control.sidebar("sidebar").addTo(map);
 map.addControl(sidebar);
-sidebar.show()
+sidebar.show();
 
-L.easyButton("glyphicon-transfer", () => {
-  sidebar.toggle();
+L.easyButton("fa-exchange", () => {
+  sidebar.toggle(); //v4
 }).addTo(map);
 
 map.addControl(
   L.control.styleEditor({ position: "topright", useGrouping: false })
 );
-
 
 //*********layer section************/
 //EX: layer map, adding FeatureGroup, addToLayer
@@ -52,6 +50,9 @@ var lyrKarte = L.tileLayer.provider("OPNVKarte");
 var lyrMapnik = L.tileLayer.provider("OpenStreetMap.Mapnik");
 var lyrEsri = L.tileLayer.provider("Esri.WorldImagery");
 map.addLayer(lyrKarte);
+
+var osm2 = new L.tileLayer.provider("OPNVKarte", { minZoom: 0, maxZoom: 10 });
+var miniMap = new L.Control.MiniMap(osm2).addTo(map);
 
 var ftgDraw = L.featureGroup().addTo(map);
 var editableLayers = new L.FeatureGroup();
@@ -66,7 +67,6 @@ map.addControl(drawControl);
 
 markerCuster = L.markerClusterGroup();
 
-
 //********GeoJSON data**********/
 
 lyrEgleNest = L.geoJSON
@@ -75,15 +75,14 @@ lyrEgleNest = L.geoJSON
   })
   .addTo(map);
 
-
 lyrBuowl = L.geoJSON.ajax("data/wildlife_raptor.geojson", {
   pointToLayer: returnBuowlIcon,
 });
 
-lyrRaptor=L.geoJSON.ajax("data/wildlife_raptor.geojson")
-lyrLines=L.geoJSON.ajax("data/client_lines.geojson",{style:styleLines}).addTo(map)
-
-
+lyrRaptor = L.geoJSON.ajax("data/wildlife_raptor.geojson");
+lyrLines = L.geoJSON
+  .ajax("data/client_lines.geojson", { style: styleLines })
+  .addTo(map);
 
 // ****dymatic layer*********
 //ex: chose map, turn on/off layer with data
@@ -98,11 +97,11 @@ overLays = {
   Draw: ftgDraw,
   "Eagle Nest": lyrEgleNest,
   "Buowl Located": markerCuster,
- // "Raptor":lyrRaptor,
-  "Road Lines":lyrLines
+  //"Raptor":lyrRaptor,
+  "Road Lines": lyrLines,
 };
 
-ctlLayer = L.control.layers(baseLayers, overLays).addTo(map)
+ctlLayer = L.control.layers(baseLayers, overLays).addTo(map);
 
 //********layer events/ Any events*******/
 
@@ -123,100 +122,119 @@ map.on("draw:created", (e) => {
 
 // *lines events*
 
-$("#btnFindLines").click(function(){
+$("#btnFindLines").click(function () {
   var val = $("#txtFindLines").val();
-  var lyr = returnLayerByAttribute(lyrLines,'Project',val); // return match obj 
+  var lyr = returnLayerByAttribute(lyrLines, "Project", val); // return match obj
   if (lyr) {
-      if (lyrSearch) {
-          lyrSearch.remove();
-      }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(map);
-      map.fitBounds(lyr.getBounds().pad(1));
-      var att = lyr.feature.properties;
-      $("#divLinesData").html(" <h4 class='font-bold mt-4 p-2'>Attributes</h4><h5>Type: "+att.type+"</h5><h5 class='mb-2'>ROW width: "+att.row_width+ "m </h5> ");
-      $("#divErrorLine").html("");
+    if (lyrSearch) {
+      lyrSearch.remove();
+    }
+    lyrSearch = L.geoJSON(lyr.toGeoJSON(), {
+      style: { color: "red", weight: 10, opacity: 0.5 },
+    }).addTo(map);
+    map.fitBounds(lyr.getBounds().pad(1));
+    var att = lyr.feature.properties;
+    $("#divLinesData").html(
+      " <h4 class='font-bold mt-4 p-2'>Attributes</h4><h5>Type: " +
+        att.type +
+        "</h5><h5 class='mb-2'>ROW width: " +
+        att.row_width +
+        "m </h5> "
+    );
+    $("#divErrorLine").html("");
   } else {
-      $("#divErrorLine").html("<h4 class='p-2'>Project ID not found</h4>");
-      $("#divLinesData").html("");
+    $("#divErrorLine").html("<h4 class='p-2'>Project ID not found</h4>");
+    $("#divLinesData").html("");
   }
 });
 
 //**Eagle nest****/
-$("#btnFindNest").click(function(){
+$("#btnFindNest").click(function () {
   var val = $("#txtFindNest").val();
-  var lyr = returnLayerByAttribute(lyrEgleNest,'nest_id',val); // return match obj 
+  var lyr = returnLayerByAttribute(lyrEgleNest, "nest_id", val); // return match obj
   if (lyr) {
-      if (lyrSearch) {
-          lyrSearch.remove();
-      }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(map);
-      map.fitBounds(lyr.getBounds().pad(1));
-      var att = lyr.feature.properties;
- //     console.log(att)
-      $("#divNestData").html(`
+    if (lyrSearch) {
+      lyrSearch.remove();
+    }
+    lyrSearch = L.geoJSON(lyr.toGeoJSON(), {
+      style: { color: "red", weight: 10, opacity: 0.5 },
+    }).addTo(map);
+    map.fitBounds(lyr.getBounds().pad(1));
+    var att = lyr.feature.properties;
+    //     console.log(att)
+    $("#divNestData").html(`
 
         <div class='mb-2'>
         <h4 class='font-bold mt-4 p-2'>Attribute of the Nest</h4>
         <div class='inline-flex gap-2'>
         <h5>Status: </h5>
-        <h5 class='${att.status === "ACTIVE NEST" ? "text-green-500" : "text-red-500"} inline-flex'> 
+        <h5 class='${
+          att.status === "ACTIVE NEST" ? "text-green-500" : "text-red-500"
+        } inline-flex'> 
           ${att.status}
         </h5> </div> </div>
       `);
-      $("#divErrorNest").html("");
+    $("#divErrorNest").html("");
   } else {
-      $("#divErrorNest").html("<h4 class='p-2'>Project ID not found</h4>");
-      $("#divNestData").html("");
+    $("#divErrorNest").html("<h4 class='p-2'>Project ID not found</h4>");
+    $("#divNestData").html("");
   }
 });
 
 // ***autocompelte*******
 
-lyrEgleNest.on('data:loaded', function(){
-  arEagleIDs.sort(function(a,b){return a-b});
+lyrEgleNest.on("data:loaded", function () {
+  arEagleIDs.sort(function (a, b) {
+    return a - b;
+  });
   $("#txtFindNest").autocomplete({
-      source:arEagleIDs
+    source: arEagleIDs,
   });
 });
 
-lyrBuowl.on('data:loaded', function(){
-  arBuowl.sort(function(a,b){return a-b});
+lyrBuowl.on("data:loaded", function () {
+  arBuowl.sort(function (a, b) {
+    return a - b;
+  });
   $("#txtFindBuowl").autocomplete({
-      source:arBuowl
+    source: arBuowl,
   });
 });
 
-lyrLines.on('data:loaded', function(){
-  arLines.sort(function(a,b){return a-b});
+lyrLines.on("data:loaded", function () {
+  arLines.sort(function (a, b) {
+    return a - b;
+  });
   $("#txtFindLines").autocomplete({
-      source:arLines
+    source: arLines,
   });
 });
-
-
-
 
 //BUOWL nest event/
-$("#btnFindBuowl").click(function(){
+$("#btnFindBuowl").click(function () {
   var val = $("#txtFindBuowl").val();
-  var lyr = returnLayerByAttribute(lyrBuowl,'Nest_ID',val); // return match obj 
+  var lyr = returnLayerByAttribute(lyrBuowl, "Nest_ID", val); // return match obj
   if (lyr) {
-      if (lyrSearch) {
-          lyrSearch.remove();
-      }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10, opacity:0.5}}).addTo(map);
-     
-      let Bounds = lyrSearch.getBounds()
-       map.fitBounds(Bounds,{maxZoom:15});
-      var att = lyr.feature.properties;
-      // console.log(att)
-      $("#divBuowlData").html(`
+    if (lyrSearch) {
+      lyrSearch.remove();
+    }
+    lyrSearch = L.geoJSON(lyr.toGeoJSON(), {
+      style: { color: "red", weight: 10, opacity: 0.5 },
+    }).addTo(map);
+
+    let Bounds = lyrSearch.getBounds();
+    map.fitBounds(Bounds, { maxZoom: 15 });
+    var att = lyr.feature.properties;
+    // console.log(att)
+    $("#divBuowlData").html(`
 
         <div class='mb-2'>
         <h4 class='font-bold mt-4 p-2'>Attribute of the Nest</h4>
         <div class='inline-flex gap-2'>
         <h5>Status: </h5>
-        <h5 class='${att.recentstatus === "ACTIVE NEST" ? "text-green-500" : "text-red-500"} inline-flex'> 
+        <h5 class='${
+          att.recentstatus === "ACTIVE NEST" ? "text-green-500" : "text-red-500"
+        } inline-flex'> 
           ${att.recentstatus}
         </h5> </div> <br/>
 
@@ -228,46 +246,37 @@ $("#btnFindBuowl").click(function(){
         
         </div>
       `);
-      $("#divErrorBuowl").html("");
+    $("#divErrorBuowl").html("");
   } else {
-      $("#divErrorBuowl").html("<h4 class='p-2'>Project ID not found</h4>");
-      $("#divBuowlData").html("");
+    $("#divErrorBuowl").html("<h4 class='p-2'>Project ID not found</h4>");
+    $("#divBuowlData").html("");
   }
 });
 
-$("input[name=custom]").click(function(){
-  
-var val= $(this).val()
-if ($(this).is(":checked")) {
-  if (val === "Eagle") {
-    map.addLayer(lyrEgleNest);}
- 
-if (val === "Road") {
-    map.addLayer(lyrLines);
-  
-} 
-if (val === "Buowl") {
-    map.addLayer(markerCuster);
-   
-}
+$("input[name=custom]").click(function () {
+  var val = $(this).val();
+  if ($(this).is(":checked")) {
+    if (val === "Eagle") {
+      map.addLayer(lyrEgleNest);
+    }
 
-  
-}
-else {
-
-  if (val === "Eagle") {
-    lyrEgleNest.remove()
-      
-   } 
-   if (val === "Road") {
-     lyrLines.remove()
-   }
-   if (val === "Buowl") {
-    markerCuster.remove()
-   }
- 
-}
-
+    if (val === "Road") {
+      map.addLayer(lyrLines);
+    }
+    if (val === "Buowl") {
+      map.addLayer(markerCuster);
+    }
+  } else {
+    if (val === "Eagle") {
+      lyrEgleNest.remove();
+    }
+    if (val === "Road") {
+      lyrLines.remove();
+    }
+    if (val === "Buowl") {
+      markerCuster.remove();
+    }
+  }
 });
 
 
@@ -297,13 +306,13 @@ function returnEagleIcon(json, latlng) {
 
 function returnBuowlIcon(json, latlng) {
   var att = json.properties;
-  arBuowl.push(att.Nest_ID.toString())
+  arBuowl.push(att.Nest_ID.toString());
   var color;
   //console.log(att);
-  if (att.recentstatus =="ACTIVE NEST") {
+  if (att.recentstatus == "ACTIVE NEST") {
     numActiveBuowl++;
-  } else{
-    numInactiveBuowl++
+  } else {
+    numInactiveBuowl++;
   }
   switch (att.recentspecies) {
     case "Red-tail Hawk":
@@ -329,52 +338,91 @@ function returnBuowlIcon(json, latlng) {
   );
 }
 
-function returnLayerByAttribute(lyr,att,val) {
+function returnLayerByAttribute(lyr, att, val) {
   var arLayers = lyr.getLayers();
-  for (i=0;i<arLayers.length-1;i++) {
-      var ftrVal = arLayers[i].feature.properties[att];
-      if (ftrVal==val) {
-          return arLayers[i];
-      }
+  for (i = 0; i < arLayers.length - 1; i++) {
+    var ftrVal = arLayers[i].feature.properties[att];
+    if (ftrVal == val) {
+      return arLayers[i];
+    }
   }
   return false;
 }
 
 function styleLines(json) {
   var att = json.properties;
-  arLines.push(att.Project.toString())
+  arLines.push(att.Project.toString());
   switch (att.type) {
-      case 'Pipeline':
-          return {color:'peru'};
-          break;
-      case 'Flowline':
-          return {color:'navy'};
-          break;
-      case 'Flowline, est.':
-          return {color:'navy', dashArray:"5,5"};
-          break;
-      case 'Electric Line':
-          return {color:'darkgreen'};
-          break;
-      case 'Access Road - Confirmed':
-          return {color:'darkred'};
-          break;
-      case 'Access Road - Estimated':
-          return {color:'darkred', dashArray:"5,5"};
-          break;
-      case 'Extraction':
-          return {color:'indigo'};
-          break;
-      default:
-          return {color:'darkgoldenrod'}
+    case "Pipeline":
+      return { color: "peru" };
+      break;
+    case "Flowline":
+      return { color: "navy" };
+      break;
+    case "Flowline, est.":
+      return { color: "navy", dashArray: "5,5" };
+      break;
+    case "Electric Line":
+      return { color: "darkgreen" };
+      break;
+    case "Access Road - Confirmed":
+      return { color: "darkred" };
+      break;
+    case "Access Road - Estimated":
+      return { color: "darkred", dashArray: "5,5" };
+      break;
+    case "Extraction":
+      return { color: "indigo" };
+      break;
+    default:
+      return { color: "darkgoldenrod" };
   }
 }
 
-setInterval(()=>{
-$("#activeEagle").text(numActiveEagle);
-$("#activeBuowl").text(numActiveBuowl);
-$("#inactiveEagle").text(numInactiveEagle);
-$("#inactiveBuowl").text(numInactiveBuowl);
-},1000)
+function removeMarkersByStatus(layer, strStatus) {
+  layer.eachLayer((marker) => {
+    if (marker.feature && marker.feature.properties) {
+      if (
+        marker.feature.properties.recentstatus === strStatus ||
+        marker.feature.properties.status === strStatus
+      ) {
+        // marker.setStyle({ opacity: 0 }); 
+        marker.remove();
+      }
+    }
+  });
+}
+
+function addMarkersByStatus(layer) {
+  layer.eachLayer((marker) => {
+   marker.addTo(map)
+  });
+}
+
+
+$("#btnRemoveActive").click(()=>{
+
+  removeMarkersByStatus(lyrEgleNest, "ACTIVE NEST")
+  removeMarkersByStatus(markerCuster, "ACTIVE NEST")
+
+})
+
+$("#btnRemoveInactive").click(()=>{
+
+  removeMarkersByStatus(lyrEgleNest, "INACTIVE LOCATION")
+  removeMarkersByStatus(markerCuster, "INACTIVE NEST")
+
+ })
+ $("#btnAddAllStatus").click(()=>{
+  addMarkersByStatus(lyrEgleNest)
+  addMarkersByStatus(markerCuster)
+ })
+
+setInterval(() => {
+  $("#activeEagle").text(numActiveEagle);
+  $("#activeBuowl").text(numActiveBuowl);
+  $("#inactiveEagle").text(numInactiveEagle);
+  $("#inactiveBuowl").text(numInactiveBuowl);
+}, 1000);
 
 //***********common functions*******/

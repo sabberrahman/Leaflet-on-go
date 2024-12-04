@@ -14,14 +14,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
+  <link rel="stylesheet" href="./plugins/font-awesome.min.css">
+  
   <link rel="stylesheet" href="./plugins/L.Control.Sidebar.css" />
   <link rel="stylesheet" href="./plugins/leaflet-editor/css/Leaflet.StyleEditor.css">
   <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.css">
   <link rel="stylesheet" href="./plugins/cluster/MarkerCluster.Default.css">
   <link rel="stylesheet" href="./plugins/jquery-ui.min.css">
+  <link rel="stylesheet" href="./plugins/Control.MiniMap.min.css">
 
   <!--Links End   -->
 
@@ -79,6 +81,8 @@
   <script src="./plugins/leaflet.ajax.min.js"></script>
   <script src="./plugins/cluster/leaflet.markercluster.js"></script>
   <script src="./plugins/jquery-ui.min.js"></script>
+  <script src="./plugins/Control.MiniMap.min.js"></script>
+  <script src="./plugins/choropleth.js"></script>
 
 </head>
 
@@ -163,6 +167,13 @@
           </div>
           
         </div>
+
+       <div id="btn" class="btn mt-2 flex gap-1 w-full">
+        <button class="bg-green-200 rounded-lg p-3 text-[14px] w-1/2 border-2 border-green-700/30 hover:bg-green-300" id="btnRemoveActive">Remove all active</button>
+        <button class="bg-red-300 rounded-lg p-3 w-1/2 text-[14px]  border-red-700/30 border-2 hover:bg-red-400" id="btnRemoveInactive">Remove all Inactive</button>
+       </div>
+       <button class="w-full p-2 bg-blue-400/70 text-[16px] rounded-lg mt-2 border-2 border-blue-800/50 hover:bg-blue-500/70" id="btnAddAllStatus">Add all Status</button>
+
       </div>
     </div>
     </div>
