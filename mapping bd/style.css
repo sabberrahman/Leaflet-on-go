@@ -14,3 +14,31 @@ body{
 height: 100%;
 width: 100%;
 }
+
+.legend {
+    line-height: 18px;
+    color: #000000;
+}
+.legend i {
+    width: 35px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.8;
+}
+
+.leaflet-control{
+    padding: 8px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.815);
+}
+
+.title{
+    font-weight: bold;
+    text-align: center;
+}
+
+.divImg{
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.554);
+}

@@ -13,24 +13,25 @@ titleLayer.addTo(map)
 var mapJSon = L.geoJSON(mapData,{style: feature => ({
     color: "#000", // Boundary color
     weight: 1,
-    fillColor: "#f2f2f2", // Default fill color
-    fillOpacity: 0.6
+    dashArray: '3',
+    fillColor: getColor(feature.properties.shapeID), // Default fill color
+    fillOpacity: 0.7
 }),onEachFeature:returnOnEach}).addTo(map)
 
 
-const styleOptions = {
-    color: "blue", 
-    weight: 1, 
-    fillColor: "#f2f2f2", 
-    fillOpacity: 0.6
-};
+// const styleOptions = {
+//     color: "blue", 
+//     weight: 1, 
+//     fillColor: "#f2f2f2", 
+//     fillOpacity: 0.6
+// };
 
-var education = L.geoJSON.ajax("data/education-data.geojson",{onEachFeature:returnOnEdu,style: feature => ({
-    color: "red", // Boundary color
-    weight: 1,
-    fillColor: "blue", // Default fill color
-    fillOpacity: 0.6
-})}).addTo(map)
+// var education = L.geoJSON.ajax("data/education-data.geojson",{onEachFeature:returnOnEdu,style: feature => ({
+//     color: "red", // Boundary color
+//     weight: 1,
+//     fillColor: "blue", // Default fill color
+//     fillOpacity: 0.6
+// })}).addTo(map)
 
 baseLayer={
     "OSM":titleLayer 
@@ -38,29 +39,15 @@ baseLayer={
 
 otherLayers={
     "bangladesh Dist": mapJSon,
-    "School, collage": education
+   // "School, collage": education
 }
 
 L.control.layers(baseLayer,otherLayers).addTo(map)
 
 // ************functions***********
 function returnOnEach(feature,layer){
-     //console.log(layer._latlngs[0]) 
-     var latlngPoly = layer._latlngs[0].map(latlng => [latlng.lng, latlng.lat]);
-
-     // Construct GeoJSON Polygon
-     var polygonGeoJSON = {
-       type: "Feature",
-       geometry: {
-         type: "Polygon",
-         coordinates: [latlngPoly] // Must be an array of arrays
-       }
-     };
-     
-     // Use the GeoJSON in Turf.js
-     var ptsWithin = turf.pointsWithinPolygon(allPoints, polygonGeoJSON);
-     console.log(ptsWithin);
-
+    const cityName = feature.properties.shapeName
+  // console.log(feature.properties.shapeName)
     layer.on({
         mouseover: e => {
             const layer = e.target;
@@ -96,16 +83,60 @@ function returnOnEach(feature,layer){
         }
        
     });
-  const details = `
-  <strong>${feature.properties.shapeName}</strong><br>
-  Id: ${feature.properties.shapeID}<br>
+  const details = `<div class="divImg">
+  <strong class="">${feature.properties.shapeName}</strong><br>
+  <img src="./images/${cityName}.jpg"/>
+  Populations: ${feature.properties.shapeID}<br>
+  </div>
 `;
 layer.bindTooltip(details, { sticky: true });
 }
 
 
-function returnOnEdu(feature,layer){
- // console.log(layer._latlng)
-  allPoints.push(layer._latlng)
-}
-console.log(allPoints)
+// function returnOnEdu(feature,layer){
+//  // console.log(layer._latlng)
+//   allPoints.push(layer._latlng)
+// }
+// console.log(allPoints)
+
+var legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    var grades = [
+        500000, 700000, 1000000, 
+        1500000, 2000000, 3000000, 
+        4000000, 6000000
+    ];
+    var colors = [
+        '#ADD8E6', '#87CEEB', '#00BFFF', 
+        '#1E90FF', '#6495ED', '#4169E1', 
+        '#0000CD', '#00008B'
+    ];
+
+    // Loop through the grades and colors to generate the legend labels
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + colors[i] + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+// Add the legend to the map
+legend.addTo(map);
+
+function getColor(d) {
+  let color=  parseInt(d.replace(/,/g, ''), 10);
+  // console.log(color)
+    return   color > 6000000 ? '#00008B' :
+    color > 4000000 ? '#0000CD' :
+    color > 3000000 ? '#4169E1' :
+    color > 2000000 ? '#6495ED' :
+    color > 1500000 ? '#1E90FF' :
+    color > 1000000 ? '#00BFFF' :
+    color > 700000 ? '#87CEEB' :
+    color > 500000 ? '#ADD8E6' :
+                      '#ADD8E6';
+            }
