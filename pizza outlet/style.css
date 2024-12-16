@@ -21,6 +21,8 @@ width: 75%;
     width: 25%;
     height: 100vh;
     overflow: auto;
+    background-color: rgba(231, 237, 243, 0.293);
+    list-style: none;
 }
 
 ::-webkit-scrollbar{

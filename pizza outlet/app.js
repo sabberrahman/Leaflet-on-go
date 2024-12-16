@@ -6,7 +6,7 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 function getTheList() {
-  const ui = document.querySelector(".list");
+  const ui = document.querySelector(".shop-item");
   storeList.forEach((shop) => {
     const div = document.createElement("div");
     const a = document.createElement("a");
